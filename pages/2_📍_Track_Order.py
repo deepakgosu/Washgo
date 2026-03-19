@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from utils.data import (
     init_session_state, STATUSES, STATUS_COLORS, SERVICES, PARTNERS,
 )
+from utils import database as db
 
 st.set_page_config(
     page_title="Track Order – WashGo",
@@ -322,6 +323,7 @@ if search_oid:
                     if st.button("Submit Rating ⭐", use_container_width=True, type="primary"):
                         mask = st.session_state.orders_df["order_id"] == search_oid
                         st.session_state.orders_df.loc[mask, "rating"] = rating_val
+                        db.save_rating(search_oid, rating_val)
                         st.success(f"Thank you! You rated this order {rating_val} ⭐")
                         st.rerun()
                 else:

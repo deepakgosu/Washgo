@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from utils.data import (
     init_session_state, PARTNERS, STATUSES, STATUS_COLORS, SERVICES,
 )
+from utils import database as db
 
 st.set_page_config(
     page_title="Partner App – WashGo",
@@ -247,6 +248,7 @@ else:
                             new_idx = STATUSES.index(new_status)
                             st.session_state.orders_df.loc[mask, "status"] = new_status
                             st.session_state.orders_df.loc[mask, "status_idx"] = new_idx
+                            db.update_order_status(row["order_id"], new_status, new_idx)
                             st.success(f"Order {row['order_id']} updated to **{new_status}**")
                             st.rerun()
 

@@ -8,6 +8,7 @@ from utils.data import (
     init_session_state, SERVICES, AREAS, PARTNERS, FACILITIES,
     TIME_SLOTS, DELIVERY_FEE, STATUSES, STATUS_COLORS,
 )
+from utils import database as db
 
 st.set_page_config(
     page_title="Book Laundry – WashGo",
@@ -469,6 +470,7 @@ elif current_step == 3:
         st.session_state.orders_df = pd.concat(
             [st.session_state.orders_df, new_df], ignore_index=True
         )
+        db.save_order(new_row)
 
     st.balloons()
 

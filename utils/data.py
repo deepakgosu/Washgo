@@ -3,6 +3,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import random
 import streamlit as st
+from utils import database as db
 
 AREAS = [
     "Hitech City", "Gachibowli", "Kondapur", "Madhapur",
@@ -115,7 +116,22 @@ def generate_sample_orders(n: int = 60) -> pd.DataFrame:
 
 def init_session_state():
     if "orders_df" not in st.session_state:
-        st.session_state.orders_df = generate_sample_orders(60)
+        # Try PostgreSQL first; fall back to in-memory sample data
+        if db.is_available():
+            db.create_tables()
+            if db.is_orders_empty():
+                sample = generate_sample_orders(60)
+                db.seed_orders(sample)
+                db.seed_partners(PARTNERS)
+                st.session_state.orders_df = sample
+            else:
+                loaded = db.load_orders()
+                st.session_state.orders_df = (
+                    loaded if loaded is not None else generate_sample_orders(60)
+                )
+        else:
+            st.session_state.orders_df = generate_sample_orders(60)
+
     if "logged_in_partner" not in st.session_state:
         st.session_state.logged_in_partner = None
     if "booking_step" not in st.session_state:
