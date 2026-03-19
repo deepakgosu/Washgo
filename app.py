@@ -4,7 +4,6 @@ from utils.data import (
     init_session_state, SERVICES, AREAS, PARTNERS, FACILITIES,
     TIME_SLOTS, DELIVERY_FEE
 )
-from utils.auth import check_auth, render_login_page, render_user_sidebar
 
 st.set_page_config(
     page_title="WashGo – Laundry on Demand",
@@ -15,8 +14,7 @@ st.set_page_config(
 
 init_session_state()
 
-# ── Auth check ────────────────────────────────────────────────────────────────
-_logged_in = check_auth()
+
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -137,15 +135,6 @@ with st.sidebar:
     <hr style='border-color:rgba(255,255,255,0.2); margin:16px 0;'>
     """, unsafe_allow_html=True)
 
-    # ── User profile / login ───────────────────────────────────────────────
-    if _logged_in:
-        render_user_sidebar()
-    else:
-        from utils.auth import get_authenticator
-        st.markdown("<div style='text-align:center;padding:8px 0;'>", unsafe_allow_html=True)
-        get_authenticator().login()
-        st.markdown("</div>", unsafe_allow_html=True)
-        st.markdown("<hr style='border-color:rgba(255,255,255,0.2); margin:12px 0;'>", unsafe_allow_html=True)
 
     st.markdown("**Quick Navigation**")
     st.page_link("app.py", label="🏠 Home", )

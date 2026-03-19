@@ -9,7 +9,6 @@ from utils.data import (
     TIME_SLOTS, DELIVERY_FEE, STATUSES, STATUS_COLORS,
 )
 from utils import database as db
-from utils.auth import require_login, render_user_sidebar
 
 st.set_page_config(
     page_title="Book Laundry – WashGo",
@@ -20,13 +19,6 @@ st.set_page_config(
 
 init_session_state()
 
-# ── Auth gate ─────────────────────────────────────────────────────────────────
-if not require_login():
-    st.stop()
-
-# ── Sidebar user profile ───────────────────────────────────────────────────────
-with st.sidebar:
-    render_user_sidebar()
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -189,9 +181,8 @@ if current_step == 1:
         st.markdown("<div class='form-section-title'>👤 Customer Details</div>", unsafe_allow_html=True)
         c1, c2 = st.columns(2)
         with c1:
-            _google_name = st.session_state.get("user_info", {}).get("name", "")
             name = st.text_input("Full Name *", placeholder="e.g. Rahul Sharma",
-                                 value=st.session_state.booking_data.get("customer_name", _google_name))
+                                 value=st.session_state.booking_data.get("customer_name", ""))
         with c2:
             phone = st.text_input("Phone Number *", placeholder="10-digit mobile number",
                                   value=st.session_state.booking_data.get("phone", ""),
