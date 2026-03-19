@@ -1,10 +1,16 @@
+# Google OAuth credentials — NEVER commit these
+google_credentials.json
+.streamlit/secrets.toml
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 .env
-.venv/
-venv/
-*.egg-info/
-dist/
-build/
-.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Excel temp files
+~$*.xlsx
